@@ -119,7 +119,12 @@ def step_impl(context, places_query):
 @then(u'on doit me proposer le libellé "{expected_text_result}"')
 def step_impl(context, expected_text_result):
     results_text = [place['name'] for place in context.places_result['places']]
+    print ("Résultats trouvés :")
+    for a_result in results_text:
+        print("--> " +  a_result)
+    print (context.url)
     assert (expected_text_result in results_text)
+
 
 @then(u'on ne doit pas me proposer le libellé "{not_expected_text_result}"')
 def step_impl(context, not_expected_text_result):
