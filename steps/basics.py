@@ -198,6 +198,39 @@ def step_impl(context):
         nav_explo_url += "&traveler_type={}".format(context.profile)
     context.nav_explo = nav_explo_url
 
+@then(u'on doit me proposer le mode alternatif suivant "{expected_pseudo_mode}"')
+def step_impl(context, expected_pseudo_mode):
+    print (context.journey_url) #pour le débug
+    print (context.nav_explo)
+
+    journeys = []
+    print ("suite de sections hors transports : ")
+    for a_journey in context.journey_result['journeys']:
+        journey_nonpt_sections = ""
+        for a_section in a_journey['sections']:
+            if a_section['type'] != "public_transport" and a_section['type'] != "on_demand_transport":
+                journey_nonpt_sections += a_section['type']
+                if 'mode' in a_section:
+                    journey_nonpt_sections += " ({}); ".format(a_section['mode'])
+                else :
+                    journey_nonpt_sections += "; "
+        print(journey_nonpt_sections)
+        journeys.append(journey_nonpt_sections)
+
+    pseudo_modes = []
+    for a_journey in journeys :
+        if "street_network (bike)" in a_journey :
+            if "tt" in a_journey :
+                pseudo_modes.append("vls")
+            else :
+                pseudo_modes.append("vélo personnel")
+        if "street_network (car)" in a_journey :
+                pseudo_modes.append("voiture personnelle")
+
+    implemented_pseudo_modes = ['vélo personnel', 'voiture personnelle', 'vls']
+    assert (expected_pseudo_mode in implemented_pseudo_modes), "Les modes alternatifs possibles sont les suivants : {}".format(implemented_pseudo_modes)
+    assert (expected_pseudo_mode in pseudo_modes), "Le mode alternatif n'a pas été trouvé dans les itinéraires retournés"
+
 @then(u'on doit me proposer la suite de sections suivante : "{expected_sections}"')
 def step_impl(context, expected_sections):
     print (context.journey_url) #pour le débug
