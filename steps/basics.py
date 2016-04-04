@@ -203,6 +203,26 @@ def step_impl(context):
         nav_explo_url += "&traveler_type={}".format(context.profile)
     context.nav_explo = nav_explo_url
 
+@then(u'on doit me proposer un prolongement de service à "{expected_stop_point}"')
+def step_impl(context,expected_stop_point):
+    print (context.journey_url) #pour le débug
+    print (context.nav_explo)
+
+    journeys = []
+    print ("suite de sections hors transports : ")
+    for a_journey in context.journey_result['journeys']:
+        journey_transfer_sections = ""
+        for a_section in a_journey['sections']:
+            if a_section['type'] == "transfer":
+                if 'transfer_type' in a_section and a_section['transfer_type']=='stay_in':
+                    journey_transfer_sections += "Prolongement de service à {}".format(a_section['from']['name'])
+                else :
+                    journey_transfer_sections += "Correspondance à {}".format(a_section['from']['name'])
+        print(journey_transfer_sections)
+        journeys.append(journey_transfer_sections)
+
+    assert ("Prolongement de service à {}".format(expected_stop_point) in journeys), "Il n'y a pas de prolongement de service à l'arrêt attendu"
+
 @then(u'on doit me proposer le mode alternatif suivant "{expected_pseudo_mode}"')
 def step_impl(context, expected_pseudo_mode):
     print (context.journey_url) #pour le débug
@@ -225,7 +245,7 @@ def step_impl(context, expected_pseudo_mode):
     pseudo_modes = []
     for a_journey in journeys :
         if "street_network (bike)" in a_journey :
-            if "tt" in a_journey :
+            if "bss_put_back" in a_journey :
                 pseudo_modes.append("vls")
             else :
                 pseudo_modes.append("vélo personnel")
