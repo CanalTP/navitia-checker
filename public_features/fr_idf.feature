@@ -9,7 +9,7 @@ Scenario: est-ce que mon paramétrage est ok et mon instance tourne ?
 
 Scenario: Nombre de réseaux
     When  je demande les réseaux
-    Then  on doit m'indiquer un total de "122" éléments
+    Then  on doit m'indiquer un total de "123" éléments
 
 Scenario: Nombre de lignes du réseau SITUS
     When  je demande les lignes du réseau "network:OIF:112"
@@ -38,3 +38,10 @@ Scenario: Volumétrie des POIs
 Scenario: Ligne en fourche - note indiquant un terminus secondaire
     When je consulte la fiche horaire du parcours "route:OIF:100110013:13" pour le prochain "Vendredi"
     Then on doit me renvoyer au moins la note suivante : "Asnieres Gennevilliers Les Courtilles"
+
+Scenario: Calcul d'itinéraire avec vélo
+Given j'ai le profil voyageur "cyclist"
+When je calcule un itinéraire avec les paramètres suivants :
+  | from                 | to          |datetime_represent | jour      | heure |
+  | Porte de vincennes   | Nation      | Partir après      | Dimanche  | 10h04 |
+Then on doit me proposer le mode alternatif suivant "vélo personnel"
