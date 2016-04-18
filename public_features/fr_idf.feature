@@ -45,3 +45,8 @@ When je calcule un itinéraire avec les paramètres suivants :
   | from                 | to          |datetime_represent | jour      | heure |
   | Porte de vincennes   | Nation      | Partir après      | Dimanche  | 10h04 |
 Then on doit me proposer le mode alternatif suivant "vélo personnel"
+
+Scenario: Est-ce que la tour eiffel a bougé ?
+    When  je cherche le lieu "Tour Eiffel Paris"
+    Then  on doit me proposer le libellé "Paris Tour Eiffel (Paris)"
+    Then  on doit me proposer le lieu suivant à "20" mètres près : "http://www.openstreetmap.org/?mlat=48.857966&mlon=2.2945015"
