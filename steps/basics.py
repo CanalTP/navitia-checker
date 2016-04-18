@@ -125,6 +125,14 @@ def step_impl(context, expected_text_result):
     print (context.url)
     assert (expected_text_result in results_text)
 
+@then(u'on doit me proposer le lieu situé approximativement ici : "{osm_link_with_marker}"')
+def step_impl(context, osm_link_with_marker):
+    results_coords = ["http://www.openstreetmap.org/?mlat={}&mlon={}".format(place['address']['coord']['lat'], place['address']['coord']['lon'] ) for place in context.places_result['places']]
+    print ("Résultats trouvés :")
+    for a_result in results_coords:
+        print("--> " +  a_result)
+    print (context.url)
+    assert (osm_link_with_marker in results_coords) #TODO - gérer le "approximativement ici"
 
 @then(u'on ne doit pas me proposer le libellé "{not_expected_text_result}"')
 def step_impl(context, not_expected_text_result):
