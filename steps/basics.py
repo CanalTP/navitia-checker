@@ -3,6 +3,7 @@ import requests
 import json
 import os, sys
 import date_lib
+import geo_lib
 
 def call_navitia(environnement, coverage, service, api_key, parameters):
     call = requests.get(environnement + coverage + "/"  + service, headers={'Authorization': api_key}, params = parameters)
@@ -125,6 +126,23 @@ def step_impl(context, expected_text_result):
     print (context.url)
     assert (expected_text_result in results_text)
 
+@then(u'on doit me proposer le lieu suivant à "{distance}" mètres près : "{osm_link_with_marker}"')
+def step_impl(context, distance, osm_link_with_marker):
+    print (context.url)
+
+    expected_coords = {}
+    expected_coords['lat'] = osm_link_with_marker.partition("mlat=")[2].partition("&mlon")[0]
+    expected_coords['lon'] = osm_link_with_marker.partition("mlon=")[2]
+
+    results_coords = [place[place['embedded_type']]['coord'] for place in context.places_result['places']]
+    print ("Résultats trouvés :")
+    we_have_a_winner = False
+    for a_result in results_coords:
+        dist_to_expected = geo_lib.distance_wgs84(a_result, expected_coords)
+        print("--> {} m - http://www.openstreetmap.org/?mlat={}&mlon={}".format(dist_to_expected, a_result['lat'], a_result['lon']))
+        if dist_to_expected <= float(distance) :
+            we_have_a_winner = True
+    assert (we_have_a_winner), "Les propositions sont trop éloignées"
 
 @then(u'on ne doit pas me proposer le libellé "{not_expected_text_result}"')
 def step_impl(context, not_expected_text_result):
