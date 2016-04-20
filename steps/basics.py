@@ -169,6 +169,7 @@ def step_impl(context, expected_line_code, position):
 
 @then(u'la ligne de code "{line_code}" doit avoir un parcours de nom "{expected_route_name}"')
 def step_impl(context, line_code, expected_route_name):
+    assert (line_code in [a_line["code"] for a_line in context.lines] ), "impossible d'identifier cette ligne"
     ligne = [une_ligne for une_ligne in context.lines if une_ligne['code']== line_code][0]
     libelles_parcours = [route['name'] for route in ligne["routes"]]
     print('parcours attendu : ' + expected_route_name)
@@ -176,6 +177,18 @@ def step_impl(context, line_code, expected_route_name):
     for a_lib in libelles_parcours :
         print('--> ' + a_lib)
     assert (expected_route_name in libelles_parcours)
+
+@then(u'la ligne de code "{line_code}" doit avoir un code de type "{expected_code_type}" ayant pour valeur "{expected_code_value}"')
+def step_impl(context, line_code, expected_code_type, expected_code_value):
+    assert (line_code in [a_line["code"] for a_line in context.lines] ), "impossible d'identifier cette ligne"
+    ligne = [une_ligne for une_ligne in context.lines if une_ligne['code']== line_code][0]
+    codes = [code_list for code_list in ligne["codes"]]
+    expected_code = {"value":expected_code_value, "type":expected_code_type}
+    print("code attendu : ")
+    print (expected_code)
+    print ('code trouvés :')
+    print (codes)
+    assert (expected_code in codes), "le code n'a pas été trouvé dans la liste des codes retournés"
 
 @given(u'j\'ai le profil voyageur "{traveler_profile}"')
 def step_impl(context, traveler_profile):
