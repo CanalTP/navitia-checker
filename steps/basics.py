@@ -431,3 +431,22 @@ def step_impl(context, stop_point_id, line_id, calendar_id):
     nav_call =  call_navitia(context.base_url, context.coverage, "lines/{}/stop_points/{}/stop_schedules".format(line_id, stop_point_id), context.api_key, params)
     context.explo_result = nav_call.json()
     context.url = nav_call.url
+
+@when(u'je consulte la fiche horaire de l\'arrêt "{stop_point_id}" pour la ligne "{line_id}"')
+def step_impl(context, stop_point_id, line_id):
+        nav_call =  call_navitia(context.base_url, context.coverage, "lines/{}/stop_points/{}/stop_schedules".format(line_id, stop_point_id), context.api_key, {})
+        context.explo_result = nav_call.json()
+        context.url = nav_call.url
+
+@then(u'on doit me renvoyer des horaires temps réel')
+def step_impl(context):
+    print (context.url)
+    if 'stop_schedules' in context.explo_result :
+        data_freshness_list = set(elem['data_freshness'] for elem in context.explo_result['stop_schedules'][0]["date_times"])
+    elif "departures" in context.explo_result :
+        data_freshness_list = set(elem['stop_date_time']['data_freshness'] for elem in context.explo_result['departures'])
+    else :
+        assert False, "ce test ne permet de vérifier la présence de temps réel que sur les fiches horaires/prochains passages à l'arrêt"
+    print ('voici la liste des fraicheurs de données retournées :')
+    print (data_freshness_list)
+    assert ("realtime" in data_freshness_list), "il n'y pas aucun horaire temps réel retourné"
