@@ -28,12 +28,12 @@ Scenario: Normalisation des modes physiques
 Scenario: Calcul d'itinéraire (OPTILE inside)
     When je calcule un itinéraire avec les paramètres suivants :
         | from                                 | to                  |datetime_represent | jour  | heure |
-        | rue Louise Chenu Boissy Saint Léger  | Porte de Charenton  | Partir après      | Mardi | 08h30 |
-    Then on doit me proposer la suite de sections suivante : "Boissy RER (Boissy-Saint-Léger) ==[ Bus 23 - Plateau de Brie ]==> Pointe du Lac (Créteil) ==[ Metro 8 - METRO ]==> Porte de Charenton (Paris) "
+        | rue Chirol Boissy Saint Léger        | Porte de Charenton  | Partir après      | Mardi | 09h00 |
+    Then on doit me proposer la suite de sections suivante : "Boissy RER (Boissy-Saint-Léger) ==[ Bus 12 - Arlequin ]==> Métro Préfecture (Créteil) / Créteil-Préfecture (Hôtel de Ville) (Créteil) ==[ Metro 8 - METRO ]==> Porte de Charenton (Paris) "
 
 Scenario: Volumétrie des POIs
     When  je demande les POIs de type "poi_type:amenity:townhall"
-    Then on doit m'indiquer un total d'au moins "900" éléments
+    Then on doit m'indiquer un total d'au moins "300" éléments
 
 Scenario: Ligne en fourche - note indiquant un terminus secondaire
     When je consulte la fiche horaire du parcours "route:OIF:100110013:13" pour le prochain "Vendredi"
@@ -50,3 +50,7 @@ Scenario: Est-ce que la tour eiffel a bougé ?
     When  je cherche le lieu "Tour Eiffel Paris"
     Then  on doit me proposer le libellé "Paris Tour Eiffel (Paris)"
     Then  on doit me proposer le lieu suivant à "20" mètres près : "http://www.openstreetmap.org/?mlat=48.857966&mlon=2.2945015"
+
+Scenario: Fusions des zones d'arrêts partagées entre plusieurs réseaux
+    When je demande les réseaux de la zone d'arrêt "stop_area:OIF:SA:8739110"
+    Then on doit m'indiquer un total d'au moins "3" éléments

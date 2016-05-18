@@ -162,6 +162,12 @@ def step_impl(context, network_id):
     context.explo_result = nav_call.json()
     context.url = nav_call.url
 
+@when(u'je demande les réseaux de la zone d\'arrêt "{stop_area_id}"')
+def step_impl(context, stop_area_id):
+    nav_call =  call_navitia(context.base_url, context.coverage, "stop_areas/{}/networks".format(stop_area_id), context.api_key, {})
+    context.explo_result = nav_call.json()
+    context.url = nav_call.url
+
 @then(u'la ligne de code "{expected_line_code}" doit remonter en position "{position}"')
 def step_impl(context, expected_line_code, position):
     ma_ligne = context.lines[int(position)-1]
