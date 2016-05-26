@@ -456,3 +456,28 @@ def step_impl(context):
     print ('voici la liste des fraicheurs de données retournées :')
     print (data_freshness_list)
     assert ("realtime" in data_freshness_list), "il n'y pas aucun horaire temps réel retourné"
+
+@when(u'je consulte le POI "{poi_id}"')
+def step_impl(context, poi_id):
+        nav_call =  call_navitia(context.base_url, context.coverage, "pois/{}".format(poi_id), context.api_key, {})
+        context.explo_result = nav_call.json()
+        context.url = nav_call.url
+
+@then(u'ce POI doit avoir une propriété de type "{expected_property_key}" ayant pour valeur "{expected_property_value}"')
+def step_impl(context, expected_property_key, expected_property_value):
+    print (context.url)
+    if "properties" in context.explo_result["pois"][0]:
+        properties_keys = [property_list for property_list in context.explo_result["pois"][0]["properties"]]
+        print ('voici la liste des propriétés trouvées :')
+        print (properties_keys)
+        assert expected_property_key in properties_keys, "la propriété attendue n'existe pas sur ce POI."
+
+        found_value = context.explo_result["pois"][0]["properties"][expected_property_key]
+        print ('voici la valeur trouvée pour la propriété {} :'.format(expected_property_key))
+        print ("--> " + found_value)
+        assert found_value == expected_property_value, "la valeur trouvée pour cette propriété n'est pas celle attendue."
+
+@then(u'on doit me renvoyer des disponibilités VLS en temps réel')
+def step_impl(context):
+    assert "stands" in context.explo_result["pois"][0], "il n'y a aucune info sur la disponibilité des VLS sur ce POI"
+    #TODO : vu que cette fonctionnalité est implémentée sur plusieurs APIs, il sera peut-être nécessaire d'ajouter de la finesse
