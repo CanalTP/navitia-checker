@@ -38,3 +38,8 @@ def day_to_use (weekday, time):
     minute = int(time.split('h')[1])
     day_to_use = day_to_use.replace(hour = hour, minute = minute, second = 0).strftime("%Y%m%dT%H%M%S")
     return day_to_use
+
+def how_many_days_from_now(my_str_date):
+    my_date = datetime.datetime.strptime(my_str_date, "%Y%m%dT%H%M%S")
+    now = datetime.datetime.now()
+    return ((my_date - now).days)
