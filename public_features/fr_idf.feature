@@ -54,3 +54,7 @@ Scenario: Est-ce que la tour eiffel a bougé ?
 Scenario: Fusions des zones d'arrêts partagées entre plusieurs réseaux
     When je demande les réseaux de la zone d'arrêt "stop_area:OIF:SA:8739110"
     Then on doit m'indiquer un total d'au moins "3" éléments
+
+Scenario: Profondeur de données
+    When je demande les jeux de données
+    Then je constate que chaque contributeur dispose d'un jeu de données valide au moins "10" jours
