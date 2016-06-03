@@ -111,6 +111,12 @@ def step_impl(context):
     context.explo_result = nav_call.json()
     context.url = nav_call.url
 
+@when(u'je demande les jeux de données')
+def step_impl(context):
+    nav_call =  call_navitia(context.base_url, context.coverage, "datasets", context.api_key, {})
+    context.explo_result = nav_call.json()
+    context.url = nav_call.url
+
 @when(u'je cherche le lieu "{places_query}"')
 def step_impl(context, places_query):
     nav_call =  call_navitia(context.base_url, context.coverage, "places", context.api_key, {'q': places_query})
@@ -481,3 +487,19 @@ def step_impl(context, expected_property_key, expected_property_value):
 def step_impl(context):
     assert "stands" in context.explo_result["pois"][0], "il n'y a aucune info sur la disponibilité des VLS sur ce POI"
     #TODO : vu que cette fonctionnalité est implémentée sur plusieurs APIs, il sera peut-être nécessaire d'ajouter de la finesse
+
+@then(u'je constate que chaque contributeur dispose d\'un jeu de données valide au moins "{min_nb_days}" jours')
+def step_impl(context, min_nb_days):
+    contributor_list = list(set([dataset['contributor']['id'] for dataset in context.explo_result["datasets"]]))
+    print ('Liste des contributeurs :')
+    print (contributor_list)
+    for a_dataset in context.explo_result["datasets"] :
+        if a_dataset['contributor']['id'] in contributor_list :
+            nb_day = date_lib.how_many_days_from_now(a_dataset['end_validation_date'])
+            if nb_day > int(min_nb_days) : #si je trouve un dataset qui dépasse, je supprime le contrib de la list
+                del(contributor_list[contributor_list.index(a_dataset['contributor']['id'])])
+            else :
+                print("--> Un des jeux de données du contributeur {} expirent le {}".format(a_dataset['contributor']['id'], a_dataset['end_validation_date']))
+
+
+    assert (len(contributor_list) == 0), "Certains contributeurs n'ont pas la profondeur de données requise"
