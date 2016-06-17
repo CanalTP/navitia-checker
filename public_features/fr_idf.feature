@@ -58,3 +58,11 @@ Scenario: Fusions des zones d'arrêts partagées entre plusieurs réseaux
 Scenario: Profondeur de données
     When je demande les jeux de données
     Then je constate que chaque contributeur dispose d'un jeu de données valide au moins "10" jours
+
+Scenario: Chemins piétons
+  Given je souhaite un itinéraire sans transports en commun
+  When je calcule un itinéraire avec les paramètres suivants :
+    | from          | to                         |datetime_represent | jour      | heure |
+    | Torcy gare    | Allée voltaire Lognes      | Partir après      | Dimanche  | 12h54 |
+  Then on doit me proposer au moins une solution
+  Then la meilleure solution doit durer moins de "10" minutes
