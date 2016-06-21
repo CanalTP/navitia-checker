@@ -20,6 +20,12 @@ def check_nb_elem(expected_nb, explo_nav_result, is_nb_exact = True):
     except KeyError:
         assert (False), "Pas d'éléments"
 
+def get_nb_journeys(journeys_nav_result):
+    try:
+        return len(journeys_nav_result['journeys'])
+    except KeyError:
+        return 0
+
 @given(u'je teste le coverage "{test_coverage}"')
 def step_impl(context, test_coverage):
     context.coverage = test_coverage
@@ -206,6 +212,10 @@ def step_impl(context, line_code, expected_code_type, expected_code_value):
 def step_impl(context, traveler_profile):
     context.profile = traveler_profile
 
+@given(u'je souhaite un itinéraire sans transports en commun')
+def step_impl(context):
+    context.non_standard_parameters = {"max_duration": 0}
+
 @when(u'je calcule un itinéraire avec les paramètres suivants ')
 def step_impl(context):
     from_text = [row['from'] for row in context.table][0]
@@ -232,6 +242,10 @@ def step_impl(context):
     #gestion des éventuels profils
     if "profile" in context :
         params['traveler_type'] = context.profile
+
+    #gestion des éventuels autres paramètres non habituels
+    if "non_standard_parameters" in context :
+        params.update(context.non_standard_parameters)
 
     journey_call = call_navitia(context.base_url, context.coverage, "journeys", context.api_key, params )
     context.journey_result = journey_call.json()
@@ -332,17 +346,30 @@ def step_impl(context, expected_sections):
         print (a_journey)
     assert (expected_sections in journeys), "La suite de sections attendue n'a pas été trouvée"
 
+@then(u'la meilleure solution doit durer moins de "{expected_duration}" minutes')
+def step_impl(context, expected_duration):
+    journeys = []
+    for a_journey in context.journey_result['journeys']:
+        if a_journey['type'] == "best":
+            duration = a_journey['duration'] / 60.0
+            assert (duration < int(expected_duration)), "Le trajet dure {} minutes".format(duration)
+    assert False, """il n'y a pas de "meilleur" itinéraire """
+
 @then(u'on ne doit pas me proposer de solution')
 def step_impl(context):
     print (context.nav_explo)
     print (context.journey_url) #pour le débug
-    #extraction du détail des sections
-    journeys = []
-    try:
-        nb_elem = len(context.journey_result['journeys'])
-    except KeyError:
-        nb_elem = 0
+
+    nb_elem = get_nb_journeys(context.journey_result)
     assert (nb_elem == 0), "Il y a {} résultats d'itinéraire".format(str(nb_elem))
+
+@then(u'on doit me proposer au moins une solution')
+def step_impl(context):
+    print (context.nav_explo)
+    print (context.journey_url) #pour le débug
+
+    nb_elem = get_nb_journeys(context.journey_result)
+    assert (nb_elem > 0), "Il n'y a pas de résultats d'itinéraire"
 
 @when(u'je cherche des POIs à "{distance}" m du lieu "{places_query}"')
 def step_impl(context, distance, places_query):
