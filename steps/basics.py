@@ -276,6 +276,15 @@ def step_impl(context, expected_tag, expected_journey_index):
     my_journey = context.journey_result['journeys'][int(expected_journey_index) - 1]
     assert expected_tag not in my_journey['tags'], "Le tag {} n'a pas été trouvé dans {} ".format(expected_tag, my_journey['tags'])
 
+@then(u'je constate que la valeur de référence de C02 est égale à "{expected_co2}"')
+def step_impl(context, expected_co2):
+    print (context.journey_url) #pour le débug
+    print (context.nav_explo)
+
+    my_context = context.journey_result['context']
+    my_car_co2_emission = "{} {}".format(my_context['car_co2_emission']['value'], my_context['car_co2_emission']['unit'])
+    assert my_car_co2_emission == expected_co2, "La valeur d'émission de CO2 ({}) ne correspond pas à la valeur attendue {}".format(my_car_co2_emission, expected_co2)
+
 @then(u'on doit me proposer un prolongement de service à "{expected_stop_point}"')
 def step_impl(context,expected_stop_point):
     print (context.journey_url) #pour le débug
