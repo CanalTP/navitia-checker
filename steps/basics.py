@@ -260,6 +260,22 @@ def step_impl(context):
         nav_explo_url += "&traveler_type={}".format(context.profile)
     context.nav_explo = nav_explo_url
 
+@then(u'on doit me renvoyer le tag "{expected_tag}" sur le trajet numéro "{expected_journey_index}"')
+def step_impl(context, expected_tag, expected_journey_index):
+    print (context.journey_url) #pour le débug
+    print (context.nav_explo)
+
+    my_journey = context.journey_result['journeys'][int(expected_journey_index) - 1]
+    assert expected_tag in my_journey['tags'], "Le tag {} n'a pas été trouvé dans {} ".format(expected_tag, my_journey['tags'])
+
+@then(u'on ne doit pas me renvoyer le tag "{expected_tag}" sur le trajet numéro "{expected_journey_index}"')
+def step_impl(context, expected_tag, expected_journey_index):
+    print (context.journey_url) #pour le débug
+    print (context.nav_explo)
+
+    my_journey = context.journey_result['journeys'][int(expected_journey_index) - 1]
+    assert expected_tag not in my_journey['tags'], "Le tag {} n'a pas été trouvé dans {} ".format(expected_tag, my_journey['tags'])
+
 @then(u'on doit me proposer un prolongement de service à "{expected_stop_point}"')
 def step_impl(context,expected_stop_point):
     print (context.journey_url) #pour le débug
