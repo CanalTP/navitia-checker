@@ -39,12 +39,19 @@ Scenario: Ligne en fourche - note indiquant un terminus secondaire
     When je consulte la fiche horaire du parcours "route:OIF:100110013:13" pour le prochain "Vendredi"
     Then on doit me renvoyer au moins la note suivante : "Asnieres Gennevilliers Les Courtilles"
 
-Scenario: Calcul d'itinéraire avec vélo
+Scenario: Calcul d'itinéraire avec vélo (par profil)
 Given j'ai le profil voyageur "cyclist"
 When je calcule un itinéraire avec les paramètres suivants :
   | from                 | to          |datetime_represent | jour      | heure |
   | Porte de vincennes   | Nation      | Partir après      | Dimanche  | 10h04 |
 Then on doit me proposer le mode alternatif suivant "vélo personnel"
+
+Scenario: Calcul d'itinéraire avec vls (par passage de paramètre en dur)
+    Given je veux bien un itinéraire avec le mode alternatif suivant "vls"
+    When je calcule un itinéraire avec les paramètres suivants :
+      | from                 | to          |datetime_represent | jour      | heure |
+      | Porte de vincennes   | Nation      | Partir après      | Dimanche  | 10h04 |
+    Then on doit me proposer le mode alternatif suivant "vls"
 
 Scenario: Est-ce que la tour eiffel a bougé ?
     When  je cherche le lieu "Tour Eiffel Paris"

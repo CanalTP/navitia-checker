@@ -216,6 +216,22 @@ def step_impl(context, traveler_profile):
 def step_impl(context):
     context.non_standard_parameters = {"max_duration": 0}
 
+@given(u'je veux bien un itinéraire avec le mode alternatif suivant "{expected_pseudo_mode}"')
+def step_impl(context, expected_pseudo_mode):
+    implemented_pseudo_modes = ['vélo personnel', 'voiture personnelle', 'vls']
+    assert (expected_pseudo_mode in implemented_pseudo_modes), "Les modes alternatifs possibles sont les suivants : {}".format(implemented_pseudo_modes)
+    if not "non_standard_parameters" in context :
+        context.non_standard_parameters = {"first_section_mode[]": ["walking"], "last_section_mode[]": ["walking"]}
+    if expected_pseudo_mode == "voiture personnelle":
+        context.non_standard_parameters['first_section_mode[]'].append("car")
+        context.non_standard_parameters['last_section_mode[]'].append("car")
+    elif expected_pseudo_mode == "vélo personnel":
+        context.non_standard_parameters['first_section_mode[]'].append("bike")
+        context.non_standard_parameters['last_section_mode[]'].append("bike")
+    elif expected_pseudo_mode == "vls":
+        context.non_standard_parameters['first_section_mode[]'].append("bss")
+        context.non_standard_parameters['last_section_mode[]'].append("bss")
+
 @when(u'je calcule un itinéraire avec les paramètres suivants ')
 def step_impl(context):
     from_text = [row['from'] for row in context.table][0]
