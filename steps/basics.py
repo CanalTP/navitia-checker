@@ -364,12 +364,10 @@ def step_impl(context, expected_sections):
 
 @then(u'la meilleure solution doit durer moins de "{expected_duration}" minutes')
 def step_impl(context, expected_duration):
-    journeys = []
-    for a_journey in context.journey_result['journeys']:
-        if a_journey['type'] == "best":
-            duration = a_journey['duration'] / 60.0
-            assert (duration < int(expected_duration)), "Le trajet dure {} minutes".format(duration)
-    assert False, """il n'y a pas de "meilleur" itinéraire """
+    best_journey = [a_journey for a_journey in context.journey_result['journeys'] if a_journey['type']=="best"]
+    assert best_journey != [], """il n'y a pas de "meilleur" itinéraire """
+    duration = best_journey[0]['duration'] / 60.0
+    assert (duration < int(expected_duration)), "Le trajet dure {} minutes".format(duration)
 
 @then(u'on ne doit pas me proposer de solution')
 def step_impl(context):
