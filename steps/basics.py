@@ -165,8 +165,9 @@ def step_impl(context, not_expected_text_result):
 def step_impl(context, network_id):
     nav_call =  call_navitia(context.base_url, context.coverage, "networks/{}/lines".format(network_id), context.api_key, {})
     context.explo_result = nav_call.json()
-    context.lines = nav_call.json()['lines']
     context.url = nav_call.url
+    assert ('lines' in nav_call.json()), "Impossible de trouver les lignes du réseau {}".format(network_id)
+    context.lines = nav_call.json()['lines']
 
 @when(u'je demande les zones d\'arrêts du réseau "{network_id}"')
 def step_impl(context, network_id):
@@ -335,6 +336,7 @@ def step_impl(context, expected_sections):
     print (context.nav_explo)
     #extraction du détail des sections
     journeys = []
+    assert ('journeys' in context.journey_result), "Aucun résultat n'a été renvoyé"
     for a_journey in context.journey_result['journeys']:
         journey_to_string = ""
         last_to = None
@@ -376,6 +378,23 @@ def step_impl(context):
 
     nb_elem = get_nb_journeys(context.journey_result)
     assert (nb_elem == 0), "Il y a {} résultats d'itinéraire".format(str(nb_elem))
+
+@then(u'le premier stop_point du premier trajet contient un équipement "{expected_equipment}"')
+def step_impl(context, expected_equipment):
+    print (context.nav_explo)
+    print (context.journey_url) #pour le débug
+    #extraction du détail des sections
+    property_found = False
+    assert (('journeys' in context.journey_result) and (len(context.journey_result['journeys']) > 0)), "Aucun itinéraire trouvé"
+    a_journey = context.journey_result['journeys'][0]
+    for a_section in a_journey['sections']:
+        if a_section['type'] == "public_transport" or a_section['type'] == "on_demand_transport":
+            print(a_section['from']['stop_point']["name"])
+            print("La liste des équipements disponible est : " + str(a_section['from']['stop_point']['equipments']))
+            print("La propriété recherchée était : " + str(expected_equipment))
+            property_found = (expected_equipment in a_section['from']['stop_point']['equipments'])
+            break
+    assert (property_found), "La propriété {} n'a pas été trouvée".format(str(expected_equipment))
 
 @then(u'on doit me proposer au moins une solution')
 def step_impl(context):

@@ -53,6 +53,13 @@ Scenario: Calcul d'itinéraire avec vls (par passage de paramètre en dur)
       | Porte de vincennes   | Nation      | Partir après      | Dimanche  | 10h04 |
     Then on doit me proposer le mode alternatif suivant "vls"
 
+Scenario: Calcul d'itinéraire accessible (ligne à 1 et 2 arrêts à 5)
+    Given j'ai le profil voyageur "wheelchair"
+    When je calcule un itinéraire avec les paramètres suivants :
+      | from                    | to                            |datetime_represent | jour   | heure |
+      | GARE D'AULNAY SOUS BOIS | GARE DE BONDY (Bondy)         | Partir après      | Lundi  | 10h00 |
+    Then on doit me proposer la suite de sections suivante : "GARE D'AULNAY SOUS BOIS (Aulnay-sous-Bois) ==[ T4 - Tram ]==> GARE DE BONDY (Bondy) "
+
 Scenario: Est-ce que la tour eiffel a bougé ?
     When  je cherche le lieu "Tour Eiffel Paris"
     Then  on doit me proposer le libellé "Paris Tour Eiffel (Paris)"
