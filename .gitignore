@@ -1,4 +1,5 @@
 /reports
 /private_features/*.feature
+/private_features/mvp/*.feature
 steps/__pycache__/
 steps/params.json
