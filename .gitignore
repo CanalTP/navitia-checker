@@ -1,5 +1,5 @@
 /reports
-/private_features/*.feature
-/private_features/mvp/*.feature
+/private_features
 steps/__pycache__/
 steps/params.json
+.gitmodules

@@ -55,34 +55,6 @@ def step_impl(context, test_coverage):
     else :
         assert False, "vous n'avez pas passé d'environnement de test valide : " + test_env
 
-@given(u'je teste un coverage privé')
-def step_impl(context):
-    """
-    Les fichiers features privés sont hébergés dans un autre répertoire et synchronisés (par ailleurs) avec le répertoire courant.
-    Ce test vérifie que les fichiers features sont bien synchronisés.
-    """
-    destination = os.path.join(os.getcwd(), "private_features")
-
-    #récupération de l'adresse du répo privé
-    params = json.load(open('steps/params.json'))
-    source = params['navitia-checker']['private_features_repo']
-
-    nom_fichier_feature = ""
-    for an_arg in sys.argv :
-        if "private_features" in an_arg :
-            path, filename = os.path.split(an_arg)
-            nom_fichier_feature = filename
-
-    if nom_fichier_feature == "":
-        assert False, "je n'ai pas réussi à comparer le fichier contenu dans le répertoire navitia-checker avec celui contenu dans le répertoire source"
-
-    #comparaison des deux fichiers
-    import hashlib
-    hash_source = hashlib.sha1(open(os.path.join(source, nom_fichier_feature), 'rb').read()).hexdigest()
-    hash_dest = hashlib.sha1(open(os.path.join(destination, nom_fichier_feature), 'rb').read()).hexdigest()
-    if hash_dest != hash_source :
-        assert False, "le fichier contenu dans le répertoire est différent de celui contenu dans le répertoire source. Il faut les synchroniser avant de lancer les tests"
-
 @when(u'j\'interroge le coverage')
 def step_impl(context):
     nav_call =  call_navitia(context.base_url, context.coverage, "", context.api_key, {})
