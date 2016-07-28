@@ -1,0 +1,3 @@
+[submodule "private_features"]
+	path = private_features
+	url = git@github.com:CanalTP/navitia-checker-private-features.git

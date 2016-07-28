@@ -8,8 +8,5 @@
   			"url" : "localhost/navitia/v1",
   			"key" : ""
   		}
-	},
-  "navitia-checker" : {
-    "private_features_repo": "../relative/path/to/my/private/features/folder/from/root/of/navitia-checker/folder"
-  }
+	}
 }
