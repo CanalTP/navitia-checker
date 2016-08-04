@@ -80,3 +80,8 @@ Scenario: Chemins piétons
     | Torcy gare    | Allée voltaire Lognes      | Partir après      | Dimanche  | 12h54 |
   Then on doit me proposer au moins une solution
   Then la meilleure solution doit durer moins de "10" minutes
+
+Scenario: Données carto
+    When je demande des infos sur les données carto
+    Then ma source de données pour les "adresses" est "osm"
+    Then ma source de données pour les "POIs" est "osm"

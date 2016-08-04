@@ -507,9 +507,6 @@ def step_impl(context, expected_property_key, expected_property_value):
     if "properties" in context.explo_result["pois"][0]:
         properties_keys = [property_list for property_list in context.explo_result["pois"][0]["properties"]]
         print ('voici la liste des propriétés trouvées :')
-        print (properties_keys)
-        assert expected_property_key in properties_keys, "la propriété attendue n'existe pas sur ce POI."
-
         found_value = context.explo_result["pois"][0]["properties"][expected_property_key]
         print ('voici la valeur trouvée pour la propriété {} :'.format(expected_property_key))
         print ("--> " + found_value)
@@ -535,3 +532,20 @@ def step_impl(context, min_nb_days):
 
 
     assert (len(contributor_list) == 0), "Certains contributeurs n'ont pas la profondeur de données requise"
+
+@when(u'je demande des infos sur les données carto')
+def step_impl(context):
+    nav_call =  call_navitia(context.base_url, context.coverage, "_geo_status", context.api_key, {})
+    context.explo_result = nav_call.json()
+    context.url = nav_call.url
+
+@then(u'ma source de données pour les "{data_type}" est "{expected_data_source}"')
+def step_impl(context, data_type, expected_data_source):
+    print (context.url)
+    assert data_type in ['adresses', 'POIs'], "Le type de données doit être soit 'adresses' soit 'POIs'"
+    if data_type == "adresses" :
+        found_sources = context.explo_result['geo_status']['street_network_sources']
+        assert expected_data_source in found_sources, "La source de données est parmi {}".format(found_sources)
+    else :
+        found_sources = context.explo_result['geo_status']['poi_sources']
+        assert expected_data_source in found_sources, "La source de données est parmi {}".format(found_sources)
