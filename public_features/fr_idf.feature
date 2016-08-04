@@ -9,11 +9,11 @@ Scenario: est-ce que mon paramétrage est ok et mon instance tourne ?
 
 Scenario: Nombre de réseaux
     When  je demande les réseaux
-    Then  on doit m'indiquer un total de "123" éléments
+    Then  on doit m'indiquer un total de "122" éléments
 
 Scenario: Nombre de lignes du réseau SITUS
     When  je demande les lignes du réseau "network:OIF:112"
-    Then  on doit m'indiquer un total de "12" éléments
+    Then  on doit m'indiquer un total de "11" éléments
 
 Scenario: Nom des parcours du réseau Stigo
     When  je demande les lignes du réseau "network:OIF:752"
@@ -71,7 +71,7 @@ Scenario: Fusions des zones d'arrêts partagées entre plusieurs réseaux
 
 Scenario: Profondeur de données
     When je demande les jeux de données
-    Then je constate que chaque contributeur dispose d'un jeu de données valide au moins "10" jours
+    Then je constate que chaque contributeur dispose d'un jeu de données valide au moins "5" jours
 
 Scenario: Chemins piétons
   Given je souhaite un itinéraire sans transports en commun
@@ -81,7 +81,12 @@ Scenario: Chemins piétons
   Then on doit me proposer au moins une solution
   Then la meilleure solution doit durer moins de "10" minutes
 
-Scenario: Données carto
+Scenario: Source des données carto
     When je demande des infos sur les données carto
     Then ma source de données pour les "adresses" est "osm"
     Then ma source de données pour les "POIs" est "osm"
+
+Scenario: Volumétrie des données carto
+    When je demande des infos sur les données carto
+    Then on doit m'indiquer un total de "107" éléments pour les "régions administratives hors périmètre" avec une tolérance de "5"
+    Then on doit m'indiquer un total de "1620" éléments pour les "régions administratives" avec une tolérance de "20"
