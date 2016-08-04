@@ -560,7 +560,7 @@ def step_impl(context, expected_nb, georef_object_type, expected_range):
         int(expected_range)
     except ValueError:
         assert False, 'le total et la tolérance doivent être des nombres entiers'
-    assert int(expected_range) < int(expected_nb), 'La tolérance doit être inférieure au nombre total'
+    assert int(expected_range) <= int(expected_nb), 'La tolérance doit être inférieure au nombre total'
     assert int(expected_range) >= 0, 'La tolérance doit être supérieure à 0'
 
     if georef_object_type == georef_type_allowed[0] :
