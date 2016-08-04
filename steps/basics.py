@@ -14,9 +14,9 @@ def check_nb_elem(expected_nb, explo_nav_result, is_nb_exact = True):
     try:
         nb_elem = int(explo_nav_result['pagination']['total_result'])
         if is_nb_exact :
-            assert (nb_elem == int(expected_nb)), "Nb d'éléments attendus " +expected_nb+ " - Nb d'éléments obtenus " + str(nb_elem)
+            assert (nb_elem == int(expected_nb)), "Nb d'éléments attendus {} - Nb d'éléments obtenus {}".format(expected_nb, nb_elem)
         else: #on s'attend à avoir au moins expected_nb d'élements
-            assert (nb_elem >= int(expected_nb)), "Nb d'éléments attendus " +expected_nb+ " - Nb d'éléments obtenus " + str(nb_elem)
+            assert (nb_elem >= int(expected_nb)), "Nb d'éléments attendus {} - Nb d'éléments obtenus {}".format(expected_nb, nb_elem)
     except KeyError:
         assert (False), "Pas d'éléments"
 
@@ -507,9 +507,6 @@ def step_impl(context, expected_property_key, expected_property_value):
     if "properties" in context.explo_result["pois"][0]:
         properties_keys = [property_list for property_list in context.explo_result["pois"][0]["properties"]]
         print ('voici la liste des propriétés trouvées :')
-        print (properties_keys)
-        assert expected_property_key in properties_keys, "la propriété attendue n'existe pas sur ce POI."
-
         found_value = context.explo_result["pois"][0]["properties"][expected_property_key]
         print ('voici la valeur trouvée pour la propriété {} :'.format(expected_property_key))
         print ("--> " + found_value)
@@ -535,3 +532,39 @@ def step_impl(context, min_nb_days):
 
 
     assert (len(contributor_list) == 0), "Certains contributeurs n'ont pas la profondeur de données requise"
+
+@when(u'je demande des infos sur les données carto')
+def step_impl(context):
+    nav_call =  call_navitia(context.base_url, context.coverage, "_geo_status", context.api_key, {})
+    context.explo_result = nav_call.json()
+    context.url = nav_call.url
+
+@then(u'ma source de données pour les "{data_type}" est "{expected_data_source}"')
+def step_impl(context, data_type, expected_data_source):
+    print (context.url)
+    assert data_type in ['adresses', 'POIs'], "Le type de données doit être soit 'adresses' soit 'POIs'"
+    if data_type == "adresses" :
+        found_sources = context.explo_result['geo_status']['street_network_sources']
+        assert expected_data_source in found_sources, "La source de données est parmi {}".format(found_sources)
+    else :
+        found_sources = context.explo_result['geo_status']['poi_sources']
+        assert expected_data_source in found_sources, "La source de données est parmi {}".format(found_sources)
+
+@then(u'on doit m\'indiquer un total de "{expected_nb}" éléments pour les "{georef_object_type}" avec une tolérance de "{expected_range}"')
+def step_impl(context, expected_nb, georef_object_type, expected_range):
+    print (context.url)
+    georef_type_allowed = ['régions administratives hors périmètre', 'régions administratives']
+    assert georef_object_type in georef_type_allowed, "Le type de données doit être soit '{}' soit '{}'".format(georef_type_allowed[0], georef_type_allowed[1])
+    try:
+        int(expected_nb)
+        int(expected_range)
+    except ValueError:
+        assert False, 'le total et la tolérance doivent être des nombres entiers'
+    assert int(expected_range) < int(expected_nb), 'La tolérance doit être inférieure au nombre total'
+    assert int(expected_range) >= 0, 'La tolérance doit être supérieure à 0'
+
+    if georef_object_type == georef_type_allowed[0] :
+        nb_elements = context.explo_result['geo_status']['nb_admins_from_cities']
+    else  :
+        nb_elements = context.explo_result['geo_status']['nb_admins']
+    assert (int(expected_nb) - int(expected_range)) <= nb_elements <= (int(expected_nb) + int(expected_range)), "Nombre d'éléments attendus {} (tolérance {}) - Nb d'éléments obtenus {}".format(expected_nb, expected_range, nb_elements)
