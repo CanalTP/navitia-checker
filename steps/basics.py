@@ -586,4 +586,4 @@ def step_impl(context):
         assert a_feed_publi['name'] != "", "Fournisseur {} : il manque le nom du fournisseur de données".format(a_feed_publi['id'])
         url = a_feed_publi['url']
         assert url.startswith("http://") or url.startswith("https://"), "Fournisseur {} : l'url ne commence pas par http:// : {}".format(a_feed_publi['id'], url)
-        assert requests.get(url).status_code == 200, "Fournisseur {} : l'url n'est pas valide : {}".format(a_feed_publi['id'], url)
+        assert requests.get(url, verify=False).status_code == 200, "Fournisseur {} : l'url n'est pas valide : {}".format(a_feed_publi['id'], url)
