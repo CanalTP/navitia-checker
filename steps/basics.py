@@ -568,3 +568,22 @@ def step_impl(context, expected_nb, georef_object_type, expected_range):
     else  :
         nb_elements = context.explo_result['geo_status']['nb_admins']
     assert (int(expected_nb) - int(expected_range)) <= nb_elements <= (int(expected_nb) + int(expected_range)), "Nombre d'éléments attendus {} (tolérance {}) - Nb d'éléments obtenus {}".format(expected_nb, expected_range, nb_elements)
+
+@then(u'on doit m\'indiquer un nombre de fournisseurs de données de "{expected_feed_publishers_nb}"')
+def step_impl(context, expected_feed_publishers_nb):
+    assert "feed_publishers" in context.explo_result, "il n'y a aucune info sur les fournisseurs de données"
+    feed_publi_list = [feed_publi['id'] for feed_publi in context.explo_result["feed_publishers"]]
+    print("Liste des fournisseurs de données :")
+    for a_feed_publi in feed_publi_list:
+        print(" -" + a_feed_publi)
+    assert len(feed_publi_list) == int(expected_feed_publishers_nb), "Nombre d'éléments attendus {} - Nb d'éléments obtenus {}".format(expected_feed_publishers_nb, len(feed_publi_list))
+
+@then(u'les informations sur les fournisseurs de données sont exploitables')
+def step_impl(context):
+    assert "feed_publishers" in context.explo_result, "il n'y a aucune info sur les fournisseurs de données"
+    for a_feed_publi in context.explo_result["feed_publishers"]:
+        assert a_feed_publi['license'] != "", "Fournisseur {} : il manque la licence des données".format(a_feed_publi['id'])
+        assert a_feed_publi['name'] != "", "Fournisseur {} : il manque le nom du fournisseur de données".format(a_feed_publi['id'])
+        url = a_feed_publi['url']
+        assert url.startswith("http://") or url.startswith("https://"), "Fournisseur {} : l'url ne commence pas par http:// : {}".format(a_feed_publi['id'], url)
+        assert requests.get(url).status_code == 200, "Fournisseur {} : l'url n'est pas valide : {}".format(a_feed_publi['id'], url)
