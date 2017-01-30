@@ -8,7 +8,7 @@
   * Sinon, obtenez une clef d'authentification navitia.io et mettez là dans le fichier
 * tester (à la racine du répertoire) :
 ```shell
-behave -D environnement=prod public_features/fr_idf.feature
+behave -D environnement=prod public_features/example.feature
 ```
 
 Si vous ne constatez aucune erreur sur les étapes Given, c'est bon !
