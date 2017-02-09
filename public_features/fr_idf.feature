@@ -42,7 +42,7 @@ Scenario: Nombre de lignes dans le réseau tram
     When  je demande les lignes du réseau "network:TRAM"
     Then  on doit m'indiquer un total de "9" éléments
 
-# Scenario: Parcours d'un Noctilien
-#     When  je demande les lignes du réseau "network:OIF:56"
-#     Then  la ligne de code "N144" doit avoir un parcours de nom "GARE DE L'EST NOCTILIEN - CORBEIL ESSONNES NOCTILIEN"
-#     Then  la ligne de code "N144" doit avoir un parcours de nom "CORBEIL ESSONNES NOCTILIEN - GARE DE L'EST NOCTILIEN"
+Scenario: Parcours d'un Noctilien
+    When  je demande les lignes du réseau "network:OIF:56"
+    Then  la ligne de code "N144" doit avoir un parcours de nom "GARE DE L'EST NOCTILIEN - CORBEIL ESSONNES NOCTILIEN"
+    Then  la ligne de code "N144" doit avoir un parcours de nom "CORBEIL ESSONNES NOCTILIEN - GARE DE L'EST NOCTILIEN"
