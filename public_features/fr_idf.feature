@@ -54,7 +54,7 @@ Scenario: Recapitalisation des arrêts - Musée d'Orsay
 
 Scenario: Recapitalisation des arrêts - St >> Saint
     When  je cherche le lieu "gare de boissy"
-    Then  on doit me proposer le libellé "Gare de Boissy Saint-Leger (Boissy-Saint-Léger)"
+    Then  on doit me proposer le libellé "Gare de Boissy Saint-Léger (Boissy-Saint-Léger)"
     But   on ne doit pas me proposer le libellé "GARE DE BOISSY ST LEGER (Boissy-Saint-Léger)"
 
 Scenario: Recapitalisation des arrêts - Chiffres romains
@@ -73,15 +73,20 @@ Scenario: Recapitalisation des arrêts - exception sur IUT
 
 Scenario: Recapitalisation des arrêts - 1er
     When  je cherche le lieu "alexandre 1er"
-    Then  on doit me proposer le libellé "ALEXANDRE 1er (Neuilly-Plaisance)"
-    But   on ne doit pas me proposer le libellé "	ALEXANDRE 1ER (Neuilly-Plaisance)"
+    Then  on doit me proposer le libellé "Alexandre 1er (Neuilly-Plaisance)"
+    But   on ne doit pas me proposer le libellé "ALEXANDRE 1ER (Neuilly-Plaisance)"
+
+Scenario: Recapitalisation des arrêts - 2ième
+    When  je cherche le lieu "mairie 2"
+    Then  on doit me proposer le libellé "Mairie du 2ème (Paris)"
+    But   on ne doit pas me proposer le libellé "MAIRIE DU 2E (Paris)"
 
 Scenario: Recapitalisation des arrêts - exception sur 2E et CDG
     When  je cherche le lieu "terminal 2E"
     Then  on doit me proposer le libellé "Aéroport CDG Terminal 2E (Le Mesnil-Amelot)"
 
 Scenario: Recapitalisation des arrêts - HDV >> Hôtel de Ville
-    When  je cherche le lieu "hdv"
+    When  je cherche le lieu "Préfecture versailles"
     Then  on doit me proposer le libellé "Préfecture Hôtel de Ville (Versailles)"
     But   on ne doit pas me proposer le libellé "Préfecture HDV (Versailles)"
 
@@ -95,7 +100,21 @@ Scenario: Recapitalisation des arrêts - ajout d'apostrophe
     Then  on doit me proposer le libellé "Château d'Eau C.Bernard (Moissy-Cramayel)"
     But   on ne doit pas me proposer le libellé "CHATEAU D EAU C.BERNARD (Moissy-Cramayel)"
 
+Scenario: Recapitalisation des arrêts - ajout d'apostrophe mais pas trop quand même
+    When  je cherche le lieu "chateau d'eau moissy"
+    Then  on doit me proposer le libellé "Château d'Eau C.Bernard (Moissy-Cramayel)"
+
 Scenario: Recapitalisation des arrêts - suppresion d'apostrophe
     When  je cherche le lieu "evreux"
     Then  on doit me proposer le libellé "Gare d'Évreux-Normandie (Évreux)"
     But   on ne doit pas me proposer le libellé "GARE DE EVREUX-NORMANDIE (Évreux)"
+
+Scenario: Recapitalisation des arrêts - accents sur À
+    When  je cherche le lieu "mare quenette"
+    Then  on doit me proposer le libellé "Mare à Quenette (Vaux-le-Pénil)"
+    But   on ne doit pas me proposer le libellé "Mare a Quenette (Vaux-le-Pénil)"
+
+Scenario: Recapitalisation des arrêts - Rond point >> Rond-Point
+    When  je cherche le lieu "rond point charles"
+    Then  on doit me proposer le libellé "Rond-Point Saint-Charles (Paris)"
+    But   on ne doit pas me proposer le libellé "ROND-POINT SAINT-CHARLES (Paris)"
