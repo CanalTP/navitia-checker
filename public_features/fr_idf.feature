@@ -102,7 +102,7 @@ Scenario: Recapitalisation des arrêts - ajout d'apostrophe
 
 Scenario: Recapitalisation des arrêts - ajout d'accents
     When  je cherche le lieu "cité universitaire"
-    Then  on doit me proposer le libellé "Cite Universitaire (Paris)"
+    Then  on doit me proposer le libellé "Cité Universitaire (Paris)"
 
 Scenario: Recapitalisation des arrêts - ajout d'accents mais pas trop quand même
     When  je cherche le lieu "torcy"
