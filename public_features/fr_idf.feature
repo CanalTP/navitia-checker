@@ -100,9 +100,13 @@ Scenario: Recapitalisation des arrêts - ajout d'apostrophe
     Then  on doit me proposer le libellé "Château d'Eau C.Bernard (Moissy-Cramayel)"
     But   on ne doit pas me proposer le libellé "CHATEAU D EAU C.BERNARD (Moissy-Cramayel)"
 
-Scenario: Recapitalisation des arrêts - ajout d'apostrophe mais pas trop quand même
-    When  je cherche le lieu "chateau d'eau moissy"
-    Then  on doit me proposer le libellé "Château d'Eau C.Bernard (Moissy-Cramayel)"
+Scenario: Recapitalisation des arrêts - ajout d'accents
+    When  je cherche le lieu "cité universitaire"
+    Then  on doit me proposer le libellé "Cite Universitaire (Paris)"
+
+Scenario: Recapitalisation des arrêts - ajout d'accents mais pas trop quand même
+    When  je cherche le lieu "torcy"
+    Then  on doit me proposer le libellé "Gare de Vaires Torcy (Vaires-sur-Marne)"
 
 Scenario: Recapitalisation des arrêts - suppresion d'apostrophe
     When  je cherche le lieu "evreux"
