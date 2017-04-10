@@ -101,6 +101,21 @@ def step_impl(context, places_query):
     context.places_result = nav_call.json()
     context.url = nav_call.url
 
+@when(u'je consulte le point d\'arrêt "{stop_point_id}"')
+def step_impl(context, stop_point_id):
+    nav_call =  call_navitia(context.base_url, context.coverage, "stop_points/{}".format(stop_point_id), context.api_key, {})
+    context.explo_result = nav_call.json()
+    context.url = nav_call.url
+    assert ('stop_points' in nav_call.json()), "Impossible de trouver ce point d'arrêt"
+
+    #on re-construit un flux places pour pouvoir ré-utiliser les étapes existantes
+    a_place_result = {}
+    a_place_result['embedded_type'] = "stop_point"
+    a_place_result['id'] = nav_call.json()['stop_points'][0]['id']
+    a_place_result['name'] = nav_call.json()['stop_points'][0]['label']
+    a_place_result['stop_point'] = nav_call.json()['stop_points'][0]
+    context.places_result = {"places": [a_place_result]}
+
 @then(u'on doit me proposer le libellé "{expected_text_result}"')
 def step_impl(context, expected_text_result):
     results_text = [place['name'] for place in context.places_result['places']]
