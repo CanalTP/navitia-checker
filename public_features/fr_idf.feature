@@ -122,3 +122,36 @@ Scenario: Recapitalisation des arrêts - Rond point >> Rond-Point
     When  je cherche le lieu "rond point charles"
     Then  on doit me proposer le libellé "Rond-Point Saint-Charles (Paris)"
     But   on ne doit pas me proposer le libellé "ROND-POINT SAINT-CHARLES (Paris)"
+
+Scenario: stop_points : ajout d'accents - Condé
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:4614403"
+    Then  on doit me proposer le libellé "Libération - Condé (Saint-Maur-des-Fossés)"
+
+Scenario: stop_points : ajout d'accents - Chennevières
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5478345"
+    Then  on doit me proposer le libellé "La Varenne - Chennevières RER (Saint-Maur-des-Fossés)"
+
+Scenario: Modif de géoloc de point d'arrêt - Jules Vanzuppe
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5709859"
+    Then  on doit me proposer le libellé "Jules Vanzuppe (Paris) (Ivry-sur-Seine)"
+    Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.8215038&mlon=2.3938315"
+
+Scenario: Modif de géoloc de point d'arrêt - Friches - Jean Jaurès
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:70:11927"
+    Then  on doit me proposer le libellé "Friches Jean Jaurès (Aulnay-sous-Bois)"
+    Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.9220718&mlon=2.5047247"
+
+Scenario: Modif de géoloc de point d'arrêt - Maison d'Arrêt
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:3730364"
+    Then  on doit me proposer le libellé "Maison d'Arrêt (L'Haÿ-les-Roses) (Fresnes)"
+    Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.7640436&mlon=2.3182474"
+
+Scenario: Modif de géoloc de point d'arrêt - Les Sablons
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:46:11531"
+    Then  on doit me proposer le libellé "Les Sablons (Viry-Châtillon)"
+    Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.6688057&mlon=2.3636531"
+
+Scenario: Codes complémentaires opendata STIF
+    When  je demande les lignes du réseau "network:OIF:285"
+    Then  la ligne de code "22" doit avoir un code de type "codifligne" ayant pour valeur "C00052"
+    Then  la ligne de code "42" doit avoir un code de type "SIRI_STIF" ayant pour valeur "STIF:Line::C00049:"
