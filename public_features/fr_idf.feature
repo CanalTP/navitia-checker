@@ -133,7 +133,7 @@ Scenario: stop_points : ajout d'accents - Chennevières
 
 Scenario: Modif de géoloc de point d'arrêt - Jules Vanzuppe
     When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5709859"
-    Then  on doit me proposer le libellé "Jules Vanzuppe (Paris) (Ivry-sur-Seine)"
+    Then  on doit me proposer le libellé "Jules Vanzuppe (Ivry-sur-Seine)"
     Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.8215038&mlon=2.3938315"
 
 Scenario: Modif de géoloc de point d'arrêt - Friches - Jean Jaurès
