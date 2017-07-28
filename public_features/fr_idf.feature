@@ -85,11 +85,6 @@ Scenario: Recapitalisation des arrêts - exception sur 2E et CDG
     When  je cherche le lieu "terminal 2E"
     Then  on doit me proposer le libellé "Aéroport CDG Terminal 2E (Le Mesnil-Amelot)"
 
-Scenario: Recapitalisation des arrêts - HDV >> Hôtel de Ville
-    When  je cherche le lieu "Préfecture versailles"
-    Then  on doit me proposer le libellé "Préfecture Hôtel de Ville (Versailles)"
-    But   on ne doit pas me proposer le libellé "Préfecture HDV (Versailles)"
-
 Scenario: Recapitalisation des arrêts - gestion des articles
     When  je cherche le lieu "noisy le grand"
     Then  on doit me proposer le libellé "Gare de Noisy le Grand Mont d'Est (Noisy-le-Grand)"
