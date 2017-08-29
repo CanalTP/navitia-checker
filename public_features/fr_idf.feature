@@ -19,7 +19,7 @@ Scenario: Source des données carto
 
 Scenario: Vérification des feed publishers
     When  je demande les réseaux
-    Then  on doit m'indiquer un nombre de fournisseurs de données de "1"
+    Then  on doit m'indiquer un nombre de fournisseurs de données de "2"
     Then  les informations sur les fournisseurs de données sont exploitables
 
 Scenario: Calcul d'iti en funiculaire
@@ -123,7 +123,7 @@ Scenario: stop_points : ajout d'accents - Condé
     Then  on doit me proposer le libellé "Libération - Condé (Saint-Maur-des-Fossés)"
 
 Scenario: stop_points : ajout d'accents - Chennevières
-    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5478345"
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5478458"
     Then  on doit me proposer le libellé "La Varenne - Chennevières RER (Saint-Maur-des-Fossés)"
 
 Scenario: Modif de géoloc de point d'arrêt - Jules Vanzuppe
