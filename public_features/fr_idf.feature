@@ -100,7 +100,7 @@ Scenario: Recapitalisation des arrêts - ajout d'accents
     Then  on doit me proposer le libellé "Cité Universitaire (Paris)"
 
 Scenario: Recapitalisation des arrêts - ajout d'accents mais pas trop quand même
-    When  je cherche le lieu "torcy"
+    When  je cherche le lieu "gare torcy"
     Then  on doit me proposer le libellé "Gare de Vaires Torcy (Vaires-sur-Marne)"
 
 Scenario: Recapitalisation des arrêts - suppresion d'apostrophe
