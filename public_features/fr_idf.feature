@@ -101,7 +101,7 @@ Scenario: Recapitalisation des arrêts - ajout d'accents
 
 Scenario: Recapitalisation des arrêts - ajout d'accents mais pas trop quand même
     When  je cherche le lieu "torcy"
-    Then  on doit me proposer le libellé "Gare de Vaires Torcy (Vaires-sur-Marne)"
+    Then  on doit me proposer le libellé "Cités Unies (Torcy) (Bussy-Saint-Martin)"
 
 Scenario: Recapitalisation des arrêts - suppresion d'apostrophe
     When  je cherche le lieu "evreux"
