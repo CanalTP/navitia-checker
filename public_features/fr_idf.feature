@@ -12,11 +12,6 @@ Scenario: Normalisation des modes physiques
     When  je demande les modes physiques
     Then  tous les modes retournés me sont connus
 
-Scenario: Source des données carto
-  When je demande des infos sur les données carto
-  Then ma source de données pour les "adresses" est "osm"
-  Then ma source de données pour les "POIs" est "osm"
-
 Scenario: Vérification des feed publishers
     When  je demande les réseaux
     Then  on doit m'indiquer un nombre de fournisseurs de données de "2"
@@ -77,7 +72,7 @@ Scenario: Recapitalisation des arrêts - 1er
     But   on ne doit pas me proposer le libellé "ALEXANDRE 1ER (Neuilly-Plaisance)"
 
 Scenario: Recapitalisation des arrêts - 2ième
-    When  je cherche le lieu "mairie 2"
+    When  je cherche le lieu "mairie 2 paris"
     Then  on doit me proposer le libellé "Mairie du 2ème (Paris)"
     But   on ne doit pas me proposer le libellé "MAIRIE DU 2E (Paris)"
 
@@ -127,7 +122,7 @@ Scenario: stop_points : ajout d'accents - Chennevières
     Then  on doit me proposer le libellé "La Varenne - Chennevières RER (Saint-Maur-des-Fossés)"
 
 Scenario: Modif de géoloc de point d'arrêt - Jules Vanzuppe
-    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:5709859"
+    When  je consulte le point d'arrêt "stop_point:OIF:SP:59:7647761"
     Then  on doit me proposer le libellé "Jules Vanzuppe (Ivry-sur-Seine)"
     Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.8215038&mlon=2.3938315"
 
@@ -138,7 +133,7 @@ Scenario: Modif de géoloc de point d'arrêt - Friches - Jean Jaurès
 
 Scenario: Modif de géoloc de point d'arrêt - Maison d'Arrêt
     When  je consulte le point d'arrêt "stop_point:OIF:SP:59:3730364"
-    Then  on doit me proposer le libellé "Maison d'Arrêt (L'Haÿ-les-Roses) (Fresnes)"
+    Then  on doit me proposer le libellé "Maison d'Arrêt (Fresnes)"
     Then  on doit me proposer le lieu suivant à "10" mètres près : "https://www.openstreetmap.org/?mlat=48.7640436&mlon=2.3182474"
 
 Scenario: Modif de géoloc de point d'arrêt - Les Sablons
