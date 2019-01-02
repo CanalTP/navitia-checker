@@ -423,7 +423,7 @@ def step_impl(context):
     expected_physical_modes = ["physical_mode:Air", "physical_mode:Boat", "physical_mode:Bus", "physical_mode:BusRapidTransit", "physical_mode:Coach", "physical_mode:Ferry", "physical_mode:Funicular",
         "physical_mode:LocalTrain", "physical_mode:LongDistanceTrain", "physical_mode:Metro", "physical_mode:RapidTransit", "physical_mode:Shuttle",  "physical_mode:Taxi", "physical_mode:Train",
         "physical_mode:Tramway", "physical_mode:Bike", "physical_mode:BikeSharingService", "physical_mode:CheckOut", "physical_mode:CheckIn", "physical_mode:Car",
-        "physical_mode:default_physical_mode", "physical_mode:Other" ]
+        "physical_mode:default_physical_mode", "physical_mode:Other", "physical_mode:RailShuttle" ]
     modes = [elem['id'] for elem in context.explo_result['physical_modes']]
     pb_de_mode = False
     for a_mode in modes :
